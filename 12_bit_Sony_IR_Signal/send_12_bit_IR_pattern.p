@@ -1,6 +1,10 @@
 // PRU-ICSS program to output 12 bit Sony IR 40kHz modulated signal on P9_27 
 // (pru0_pru_r30_5)
-// 
+// These signal consist of a 2400 microsecond initial signal followed by 
+// patterns of either (600 microsecond off, 600 microsecond on) OR
+// (600 microsecond off, 1200 microsecond on). The former is interpreted as a 0;
+// the latter as 1.  
+// The signal is sent 3 times with a delay of about 26400 microseconds in between.
 
 .origin 0 			//start of program in PRU memory
 .entrypoint START		//program entry point (for a debugger)
@@ -9,7 +13,7 @@
 #define PRU0_R31_VEC_VALID 32   //allows notification of program completion
 #define PRU_EVTOUT_0 3		//the event number that is sent back
 
-//macro to be off for 600 microseconds
+//macro to be off for a variable number of loops of about 10 ns each.
 //Note that whenever this macro is called, the pin is already low
 //so we do not need to set the pin low
 .macro off_for
@@ -21,7 +25,7 @@ DELAY_START:
 .endm
 
 
-//macro to send 40kHz signal for 600 or 2400 microseconds (i.e. 24 or 96 cycles)
+//macro to send 40kHz signal for 600 or 2400 microseconds (i.e. 24 or 96 cycles of 40 kHz)
 .macro on_for_n_cycles
 .mparam CYCLES_ON
         MOV     r1, CYCLES_ON    //set the cycle count
@@ -43,7 +47,7 @@ DELAYOFF:
 .endm
 
 //Beginning of the program
-	//read the memory that was set by the C program into register
+//read the memory that was set by the C program into register
 	MOV 	r0, 0x00000000
 	LBBO	r12, r0, 0, 4
 	MOV  r3, 3	//loop to send the pattern three times
