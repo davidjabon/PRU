@@ -4,7 +4,7 @@
 .origin 0 			//start of program in PRU memory
 .entrypoint START		//program entry point (for a debugger)
 
-#define DELAY 1249		//1/2*1/40000*1/(5e-9)*(1 loop/2 instructions)
+#define DELAY 1249		//1/2*1/40000*1/(5e-9)*(1 loop/2 instructions) minus 1 (for clearing/setting pin and reseting REG0)
 #define PRU0_R31_VEC_VALID 32   //allows notification of program completion
 #define PRU_EVTOUT_0 3		//the event number that is sent back
 
