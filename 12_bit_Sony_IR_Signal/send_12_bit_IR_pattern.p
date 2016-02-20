@@ -52,19 +52,19 @@ DELAYOFF:
 	LBBO	r12, r0, 0, 4
 	MOV  r3, 3	//loop to send the pattern three times
 START:
-	on_for_n_cycles 96
-	MOV 	r4, 0    //set inner loop variable; note we will count up
+	on_for_n_cycles 96   //on for 2400 microseconds
+	MOV 	r4, 0        //set inner loop variable; note we will count up
 INNER_LOOP:
-	off_for 60000
-	on_for_n_cycles 24
-	QBBC SKIP_TO, r12, r4
+	off_for 60000       //always off for 600 microseconds
+	on_for_n_cycles 24  //always on for 600 microseconds
+	QBBC SKIP_TO, r12, r4   // if bit r4 is 1 we will be on for 600 microseconds more
 	on_for_n_cycles 24
 SKIP_TO:
-	ADD r4, r4, 1
-	QBNE INNER_LOOP, r4, 12
+	ADD r4, r4, 1           //increment counter r4
+	QBNE INNER_LOOP, r4, 12  //test if r4 = 12; if not loop.
 OFF_PERIOD_AT_END:
-	off_for 2640000
-	SUB r3, r3, 1
+	off_for 2640000           //final delay
+	SUB r3, r3, 1             //decrement r3 counter
 	QBNE START, r3, 0		//loop back three times
 
 END:				//notify the calling app that finished
