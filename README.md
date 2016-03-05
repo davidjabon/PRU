@@ -1,7 +1,7 @@
 # PRU
 This repository contains assembly language programs for the BeagleBone PRU sub-processors. The workflow is as follows:
 
-1. Compile the appropriate overlay and install it.  You can also install the overlay automatically on boot.
+1. Compile the appropriate overlay and install it.  You can also install the overlay automatically on boot. You may need to disable the HDMI overlay as many PRU pins overlap with HDMI pins.
 
 2. Compile the assembly language program using pasm.  A .bin file will be produced.
 
